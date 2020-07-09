@@ -6,7 +6,9 @@ use App\Entity\Property ;
 use App\Repository\PropertyRepository ;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController ;
 use Symfony\Component\HttpFoundation\Response ;
+use Symfony\Component\HttpFoundation\Request ;
 use Symfony\Component\Routing\Annotation\Route ;
+use Knp\Component\Pager\PaginatorInterface;
 
 use Twig\Environment ;
 
@@ -19,7 +21,7 @@ class PropertyController extends AbstractController{
      * @Route("/biens", name="property.index")
      * @return Response
      */
-    public function index():Response
+    public function index(PaginatorInterface $paginator, Request $request):Response
     {
         /* ajouter un champ (CREATE)
         $property = new Property();
@@ -44,12 +46,17 @@ class PropertyController extends AbstractController{
         //$this->repository->find(1); tout les champ par id
         //$this->repository->findOneBy(['floor' => 4]) tout les champ dont le bien est au 4eme etage
 
-        $properties = $this->repository->findAllVisible();
+        $properties = $paginator->paginate(
+                $this->repository->findAllVisibleQuery(),
+                $request->query->getInt('page', 1),
+                12
+        )
+        ;
         /*
         $properties[0]->setSold(false);
         $this->em->flush();*/
         dump($properties);
-        return $this->render('pages/property/index.html.twig', ['current_menu' => 'property']);
+        return $this->render('pages/property/index.html.twig', ['current_menu' => 'property','properties' => $properties]);
     }
 
     /**

@@ -99,6 +99,15 @@
     "egulias/email-validator": {
         "version": "2.1.18"
     },
+    "fzaninotto/faker": {
+        "version": "v1.9.1"
+    },
+    "knplabs/knp-components": {
+        "version": "v1.3.10"
+    },
+    "knplabs/knp-paginator-bundle": {
+        "version": "v4.1.1"
+    },
     "monolog/monolog": {
         "version": "1.25.4"
     },
