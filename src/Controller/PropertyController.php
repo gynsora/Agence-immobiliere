@@ -3,6 +3,8 @@ namespace App\Controller ;
 
 use Doctrine\ORM\EntityManagerInterface ;
 use App\Entity\Property ;
+use App\Entity\PropertySearch ;
+use App\Form\PropertySearchType;
 use App\Repository\PropertyRepository ;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController ;
 use Symfony\Component\HttpFoundation\Response ;
@@ -45,18 +47,28 @@ class PropertyController extends AbstractController{
         //$this->repository->findAll(); tout les champ
         //$this->repository->find(1); tout les champ par id
         //$this->repository->findOneBy(['floor' => 4]) tout les champ dont le bien est au 4eme etage
+        /*
+        $properties[0]->setSold(false);
+        $this->em->flush();
+        dump($properties);*/
+
+        //création du filtre des biens (le formulaire de propertySearch)
+        $search = new PropertySearch();
+        $form = $this->createForm(PropertySearchType::class,$search);
+        $form->handleRequest($request);
 
         $properties = $paginator->paginate(
-                $this->repository->findAllVisibleQuery(),
+                $this->repository->findAllVisibleQuery($search),
                 $request->query->getInt('page', 1),
                 12
         )
         ;
-        /*
-        $properties[0]->setSold(false);
-        $this->em->flush();*/
-        dump($properties);
-        return $this->render('pages/property/index.html.twig', ['current_menu' => 'property','properties' => $properties]);
+        
+        return $this->render('pages/property/index.html.twig', [
+            'current_menu' => 'property',
+            'properties' => $properties,
+            'form' => $form->createView()
+        ]);
     }
 
     /**
