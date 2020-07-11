@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier l'option{% endblock %}
+
+{% block body %}
+    <div class="container mt-4">
+        <h1>Modifier l'option</h1>
+
+        {{ include('admin/option/_form.html.twig', {'button_label': 'Modifier'}) }}     
+
+        <div class="mt-4">
+            {{ include('admin/option/_delete_form.html.twig') }}
+        </div>
+        <div class="mt-4">
+            <a href="{{ path('option_index') }}">Revenir à la liste des options </a>
+        </div>
+    </div>
+{% endblock %}

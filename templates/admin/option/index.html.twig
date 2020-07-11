@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gérer les options{% endblock %}
+
+{% block body %}
+    <div class="container mt-4">
+        <h1>Gérer les options</h1>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for option in options %}
+                <tr>
+                    <td>{{ option.id }}</td>
+                    <td>{{ option.name }}</td>
+                    <td>
+                        <a href="{{ path('option_show', {'id': option.id}) }}" class="btn btn-primary">Voir</a>
+                        <a href="{{ path('option_edit', {'id': option.id}) }}" class="btn btn-secondary">Editer</a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="3">Aucune option enregistré</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        <a href="{{ path('option_new') }}">Créer une nouvelle option</a>
+    </div>
+{% endblock %}

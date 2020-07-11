@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Option{% endblock %}
+
+{% block body %}
+    <div class="container mt-4">
+        <h1>Option</h1>
+        <table class="table">
+            <tbody>
+                <tr>
+                    <th>Id</th>
+                    <td>{{ option.id }}</td>
+                </tr>
+                <tr>
+                    <th>Nom</th>
+                    <td>{{ option.name }}</td>
+                </tr>
+            </tbody>
+        </table>        
+
+        <a href="{{ path('option_edit', {'id': option.id}) }}" class="mt-2 mb-2 btn btn-primary" >Modifier</a>
+
+        {{ include('admin/option/_delete_form.html.twig') }}
+
+        <a href="{{ path('option_index') }}">Revenir à la liste des options</a>
+
+    </div>
+{% endblock %}

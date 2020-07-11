@@ -11,6 +11,8 @@ use App\Entity\Property ;
 use App\Repository\PropertyRepository ;
 use App\Form\PropertyType;
 
+use App\Entity\Option ;
+
 
 
 class AdminPropertyController extends AbstractController{
@@ -50,11 +52,12 @@ class AdminPropertyController extends AbstractController{
             'form' => $form->createView()
         ]);
     }
+    
     /**
-     * @Route("/admin/property/{id}", name="admin.property.edit", methods="GET|POST")
-     */
-    public function edit(Property $property,Request $request){
-       
+    * @Route("/admin/property/{id}", name="admin.property.edit", methods="GET|POST")
+    */
+    public function edit(Property $property,Request $request){        
+        
         $form = $this->createForm(PropertyType::class,$property);
         $form->handleRequest($request);
 
@@ -69,17 +72,26 @@ class AdminPropertyController extends AbstractController{
             'form' => $form->createView()
         ]);
     }
+
     /**
-     * @Route("/admin/property/{id}", name="admin.property.delete", methods="DELETE")
-     */
-    public function delete(Property $property,Request $request){
-        if( $this->isCsrfTokenValid( $property->getId() , $request->get('_csrf_token') ) ){
+    * @Route("/admin/property/{id}", name="admin.property.delete", methods="DELETE")
+    */
+    public function delete(Property $property, Request $request){
+        //$this->em->remove($property);
+        //$this->em->flush();
+        //return new Response('Supression');
+        //return $this->redirectToRoute('admin.property.index');
+        if ($this->isCsrfTokenValid('delete'.$property->getId(), $request->get('_token'))) {
             $this->em->remove($property);
             $this->em->flush();
-            $this->addFlash('success','Bien supprimé avec succès');
-        }        
-        return $this->redirectToRoute("admin.property.index");
+        }
+
+        return $this->redirectToRoute('admin.property.index');
     }
+   
+
+    
+    
 
     
 }
