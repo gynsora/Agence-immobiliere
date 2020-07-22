@@ -43,8 +43,8 @@ class PropertySearchType extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver)
     {
-        //ici on précise que l'on veut utiliser la méthod get pour ce formulaire (c'est un filtre a faire sur des données de la meme page)
-        //on enleve la csrf_protection puisque le formulaire ne fera pas de requete dans la bdd mais debut des données deja presente dans le controller PropertyController
+        //ici on précise que l'on veut utiliser la méthode get pour ce formulaire (c'est un filtre a faire sur des données de la meme page)
+        //on enleve la csrf_protection puisque le formulaire ne fera pas de requete dans la bdd mais depuis des données deja presente dans le controller PropertyController
 
         $resolver->setDefaults([
             'data_class' => PropertySearch::class,

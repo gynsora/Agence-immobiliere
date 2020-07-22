@@ -9,11 +9,14 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\HttpFoundation\File\File;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 
 /**
  * @ORM\Entity(repositoryClass=PropertyRepository::class)
  * @UniqueEntity("title")
+ * @Vich\Uploadable
  */
 class Property
 {
@@ -27,6 +30,20 @@ class Property
      * @ORM\Column(type="integer")
      */
     private $id;
+
+
+    /**
+     * @ORM\Column(type="string",nullable=true)
+     * @var string|null
+     */
+    private $filename;
+
+    /** 
+     * @Vich\UploadableField(mapping="property_image", fileNameProperty="filename")
+     * @var File|null
+     */
+    private $imageFile;
+
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -100,6 +117,13 @@ class Property
      * @ORM\ManyToMany(targetEntity=Option::class, inversedBy="properties")
      */
     private $options;
+
+    /**
+     * @ORM\Column(type="datetime",nullable=true)
+     * 
+     * @var \DateTimeInterface|null     
+     */
+    private $updated_at;
 
     public function __construct(){
         $this->created_at = new \Datetime();
@@ -309,4 +333,57 @@ class Property
 
         return $this;
     }
+
+    /**
+     * @return null|string
+     */
+    public function getFilename():?string
+    {
+        return $this->filename;
+    }
+
+    /**
+     * @param null|string
+     * return Property
+     */
+    public function setFilename(?string $filename):Property
+    {
+        $this->filename = $filename ;
+        return $this;
+    }
+
+    /**
+     * @return null|File
+     */
+    public function getImageFile():?File
+    {
+        return $this->imageFile;
+    }
+
+    /**
+     * @param null|\Symfony\Component\HttpFoundation\File\UploadedFile|File $imageFile
+     * return Property
+     */
+    public function setImageFile(?File $imageFile):Property
+    {
+        $this->imageFile = $imageFile ;
+        if (null !== $imageFile) {
+            // It is required that at least one field changes if you are using doctrine
+            // otherwise the event listeners won't be called and the file is lost
+            $this->updated_at = new \DateTimeImmutable();
+        }
+        return $this;
+    }
+
+    public function getUpdatedAt(): ?\DateTimeInterface
+    {
+        return $this->updated_at;
+    }
+
+    public function setUpdatedAt(\DateTimeInterface $updated_at): self
+    {
+        $this->updated_at = $updated_at;
+        return $this;
+    }
+
 }
